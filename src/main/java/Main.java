@@ -12,7 +12,7 @@ public class Main {
         try {
             Accessor ac = Accessor.getInstance();
             if (ac != null)
-                System.out.println("Connection successful");
+                System.out.println("Connection  successful");
             else {
                 System.out.println("Connection faild");
                 System.exit(0);
@@ -35,7 +35,7 @@ public class Main {
             for (var e : task1.entrySet()) {
                 System.out.println("\t" + e.getKey() + " " + e.getValue());
             }
-            ArrayList<Integer> task2 = ac.task2("полу-люкс", new Date(2023, 1, 13));
+            ArrayList<Integer> task2 = ac.task2("полу-люкс", new Date(2024, 2, 16));
             System.out.println("List of task2:");
             for (int i = 0; i < task2.size(); i++)
                 System.out.println("\t" + task2.get(i));

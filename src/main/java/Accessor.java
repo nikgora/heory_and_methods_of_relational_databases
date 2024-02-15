@@ -90,7 +90,6 @@ public class Accessor {
         ResultSet rs = stat.executeQuery("SELECT number_room, price FROM Room WHERE capacity='" + capacity + "'");
         while (rs.next()) {
             map.put(rs.getInt("number_room"), rs.getDouble("price"));
-
         }
         rs.close();
         return map;
@@ -101,7 +100,6 @@ public class Accessor {
         ResultSet rs = stat.executeQuery("SELECT number_room FROM Room WHERE ref_comfort = (SELECT id_comfort FROM Comfort WHERE description = '" + description + "') AND( number_room  IN (SELECT ref_room FROM Renting WHERE date_out < '" + date + "' ) OR  number_room NOT IN (SELECT ref_room FROM Renting))");
         while (rs.next()) {
             arr.add(rs.getInt("number_room"));
-
         }
         rs.close();
         return arr;
@@ -112,7 +110,6 @@ public class Accessor {
         ResultSet rs = stat.executeQuery("SELECT price FROM Room WHERE number_room ='" + number_room + "'");
         while (rs.next()) {
             res += (rs.getDouble("price"));
-
         }
         return res * numberOfDays;
     }
@@ -132,7 +129,6 @@ public class Accessor {
         ResultSet rs = stat.executeQuery("SELECT ref_room FROM Renting WHERE date_out = CURRENT_DATE");
         while (rs.next()) {
             arr.add(rs.getInt("ref_room"));
-
         }
         rs.close();
         return arr;
