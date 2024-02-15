@@ -48,6 +48,10 @@ public class Main {
             for (var e : task4.entrySet()) {
                 System.out.println("\t" + e.getKey() + " " + e.getValue());
             }
+            ArrayList<Integer> task5 = ac.task5();
+            System.out.println("List of task5:");
+            for (int i = 0; i < task5.size(); i++)
+                System.out.println("\t" + task5.get(i));
             //close connection to DB
             ac.closeConnection();
         } catch (Exception ex) {

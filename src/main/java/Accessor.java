@@ -126,6 +126,18 @@ public class Accessor {
         rs.close();
         return map;
     }
+
+    public ArrayList<Integer> task5() throws SQLException {
+        ArrayList<Integer> arr = new ArrayList<Integer>();
+        ResultSet rs = stat.executeQuery("SELECT ref_room FROM Renting WHERE date_out = CURRENT_DATE");
+        while (rs.next()) {
+            arr.add(rs.getInt("ref_room"));
+
+        }
+        rs.close();
+        return arr;
+    }
+
     /**
      * PRAC 2
      */
