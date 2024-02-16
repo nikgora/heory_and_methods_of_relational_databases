@@ -35,7 +35,7 @@ public class Main {
             for (var e : task1.entrySet()) {
                 System.out.println("\t" + e.getKey() + " " + e.getValue());
             }
-            ArrayList<Integer> task2 = ac.task2("полу-люкс", new Date(2024, 2, 16));
+            ArrayList<Integer> task2 = ac.task2("полу-люкс", new Date(124, 1, 9));
             System.out.println("List of task2:");
             for (int i = 0; i < task2.size(); i++)
                 System.out.println("\t" + task2.get(i));
@@ -52,6 +52,40 @@ public class Main {
             System.out.println("List of task5:");
             for (int i = 0; i < task5.size(); i++)
                 System.out.println("\t" + task5.get(i));
+
+            System.out.println("PRAC 2\nTASK 1");
+            int res = ac.addRoom(110, 2, "полу-люкс");
+            if (res == 0) {
+                System.out.println("\tsuccessful");
+            } else if (res == 1)
+                System.out.println("\tThis room exist");
+            else if (res == 2)
+                System.out.println("\tNo such comfort");
+            else System.out.println("\t Something went wrong");
+            System.out.println("Task 2");
+            Date date = new Date(124, 1, 16);
+            res = ac.bookClient("Sdobnik M. S.", 110, date);
+            if (res == 0) {
+                System.out.println("\tsuccessful");
+            } else if (res == 1)
+                System.out.println("\tThis client not register");
+            else if (res == 2)
+                System.out.println("\tRoom is reserved");
+            else System.out.println("\t Something went wrong");
+            System.out.println("Task 3");
+            res = ac.updatePrice(110, 230);
+            if (res == 0) {
+                System.out.println("\tsuccessful");
+            } else if (res == 1)
+                System.out.println("\tThis room is not exist");
+            else System.out.println("\t Something went wrong");
+            System.out.println("Task 4");
+            res = ac.deleteClient("Sdobnik M. S.");
+            if (res == 0) {
+                System.out.println("\tsuccessful");
+            } else if (res == 1)
+                System.out.println("\tNo such client");
+            else System.out.println("\t Something went wrong");
             //close connection to DB
             ac.closeConnection();
         } catch (Exception ex) {
