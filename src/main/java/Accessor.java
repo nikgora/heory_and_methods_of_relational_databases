@@ -142,88 +142,82 @@ public class Accessor {
      * @param number_room
      * @param capacity
      * @param comfort
-     * @return 0 - ok, 1 - room exist, 2 - no comfort, 3 - something went wrong
+     * @return n - number of rows that changed
      * @throws SQLException
+     * @throws Exception
      */
-    public int addRoom(int number_room, int capacity, String comfort) throws SQLException {
+    //TODO Exception
+    public int addRoom(int number_room, int capacity, String comfort) throws SQLException, Exception {
         ResultSet rs = stat.executeQuery("SELECT number_room FROM Room WHERE number_room='" + number_room + "'");
         if (rs.next())
-            return 1;
+            throw new Exception("room is already exist");
         rs = stat.executeQuery("SELECT id_comfort FROM Comfort WHERE description='" + comfort + "'");
         int id_comfort = -1;
         if (!rs.next())
-            return 2;
+            throw new Exception("no such comfort");
         else {
             id_comfort = rs.getInt("id_comfort");
 
         }
-        if (id_comfort == -1) return 3;
-        //insert new Client. executeUpdate returns count of affected rows
+
         int n = stat.executeUpdate("INSERT INTO room (number_room, capacity, ref_comfort, price) VALUES ( '" + number_room + "','" + capacity + "', '" + id_comfort + "', NULL)");
-        if (n > 0)
-            return 0;
-        return 3;
+        return n;
     }
 
     /**
      * @param fio
      * @param number_room
      * @param date
-     * @return 0 - ok, 1 - no such client, 2 - room is reserved, 3 - something went wrong
+     * @return n - number of rows that changed
      * @throws SQLException
+     * @throws Exception
      */
-    public int bookClient(String fio, int number_room, Date date) throws SQLException {
+    public int bookClient(String fio, int number_room, Date date) throws SQLException, Exception {
         ResultSet rs = stat.executeQuery("SELECT id_client FROM client WHERE fio='" + fio + "'");
         int id_client = -1;
         if (!rs.next())
-            return 1;
+            throw new Exception("no such client");
         else {
             id_client = rs.getInt("id_client");
         }
         rs = stat.executeQuery("SELECT ref_room from renting where ref_room = '" + number_room + "' and (date_in <= '" + date + "' and (date_out >= '" + date + "' OR date_out is NULL))");
         if (rs.next())
-            return 2;
+            throw new Exception("room is reserved");
         int n = stat.executeUpdate("INSERT INTO renting (ref_client, ref_room, date_in, date_out) VALUES ('" + id_client + "','" + number_room + "','" + date + "', NULL )");
-        if (n > 0)
-            return 0;
-        return 3;
+        return n;
     }
 
     /**
      * @param number_room
      * @param price
-     * @return 0 - ok, 1 - room isn`t exist, 2 - something went wrong
+     * @return n - number of rows that changed
      * @throws SQLException
+     * @throws Exception
      */
-    public int updatePrice(int number_room, double price) throws SQLException {
+    public int updatePrice(int number_room, double price) throws SQLException, Exception {
         ResultSet rs = stat.executeQuery("SELECT number_room FROM Room WHERE number_room='" + number_room + "'");
         if (!rs.next())
-            return 1;
+            throw new Exception("room isn`t exist");
         //insert new Client. executeUpdate returns count of affected rows
         int n = stat.executeUpdate("UPDATE room Set price = '" + price + "'  WHERE number_room='" + number_room + "'");
-        if (n > 0)
-            return 0;
-        return 2;
+        return n;
     }
 
     /**
      * @param fio
-     * @return 0-ok, 1 - no such client, 2 - something went wrong
+     * @return n - number of rows that changed
      * @throws SQLException
+     * @throws Exception
      */
-    public int deleteClient(String fio) throws SQLException {
+    //TODO Exception
+    public int deleteClient(String fio) throws SQLException, Exception {
         ResultSet rs = stat.executeQuery("SELECT id_client FROM client WHERE fio='" + fio + "'");
         int id_client = -1;
         if (!rs.next())
-            return 1;
+            throw new Exception("no such client");
         id_client = rs.getInt("id_client");
         int n = stat.executeUpdate("DELETE FROM renting WHERE ref_client = '" + id_client + "'");
-        if (n == 0)
-            return 2;
-
-        n = stat.executeUpdate("DELETE FROM client WHERE fio = '" + fio + "'");
-        if (n == 0)
-            return 2;
-        return 0;
+        n += stat.executeUpdate("DELETE FROM client WHERE fio = '" + fio + "'");
+        return n;
     }
 }
