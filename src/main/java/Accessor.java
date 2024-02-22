@@ -146,7 +146,6 @@ public class Accessor {
      * @throws SQLException
      * @throws Exception
      */
-    //TODO Exception
     public int addRoom(int number_room, int capacity, String comfort) throws SQLException, Exception {
         ResultSet rs = stat.executeQuery("SELECT number_room FROM Room WHERE number_room='" + number_room + "'");
         if (rs.next())
@@ -198,7 +197,6 @@ public class Accessor {
         ResultSet rs = stat.executeQuery("SELECT number_room FROM Room WHERE number_room='" + number_room + "'");
         if (!rs.next())
             throw new Exception("room isn`t exist");
-        //insert new Client. executeUpdate returns count of affected rows
         int n = stat.executeUpdate("UPDATE room Set price = '" + price + "'  WHERE number_room='" + number_room + "'");
         return n;
     }
@@ -209,7 +207,6 @@ public class Accessor {
      * @throws SQLException
      * @throws Exception
      */
-    //TODO Exception
     public int deleteClient(String fio) throws SQLException, Exception {
         ResultSet rs = stat.executeQuery("SELECT id_client FROM client WHERE fio='" + fio + "'");
         int id_client = -1;
@@ -221,3 +218,6 @@ public class Accessor {
         return n;
     }
 }
+
+/*********************************** Task 3  ******************************************/
+
