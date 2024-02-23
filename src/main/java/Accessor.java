@@ -1,6 +1,7 @@
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -85,11 +86,11 @@ public class Accessor {
     /**
      * PRAC 1
      */
-    public Map<Integer, Double> task1(int capacity) throws SQLException {
-        Map<Integer, Double> map = new HashMap<Integer, Double>();
+    public Map<Integer, Float> task1(int capacity) throws SQLException {
+        Map<Integer, Float> map = new HashMap<Integer, Float>();
         ResultSet rs = stat.executeQuery("SELECT number_room, price FROM Room WHERE capacity='" + capacity + "'");
         while (rs.next()) {
-            map.put(rs.getInt("number_room"), rs.getDouble("price"));
+            map.put(rs.getInt("number_room"), rs.getFloat("price"));
         }
         rs.close();
         return map;
@@ -105,11 +106,11 @@ public class Accessor {
         return arr;
     }
 
-    public double task3(int numberOfDays, int number_room) throws SQLException {
-        double res = 0;
+    public float task3(int numberOfDays, int number_room) throws SQLException {
+        float res = 0;
         ResultSet rs = stat.executeQuery("SELECT price FROM Room WHERE number_room ='" + number_room + "'");
         while (rs.next()) {
-            res += (rs.getDouble("price"));
+            res += (rs.getFloat("price"));
         }
         return res * numberOfDays;
     }
@@ -193,7 +194,7 @@ public class Accessor {
      * @throws SQLException
      * @throws Exception
      */
-    public int updatePrice(int number_room, double price) throws SQLException, Exception {
+    public int updatePrice(int number_room, float price) throws SQLException, Exception {
         ResultSet rs = stat.executeQuery("SELECT number_room FROM Room WHERE number_room='" + number_room + "'");
         if (!rs.next())
             throw new Exception("room isn`t exist");
@@ -217,7 +218,33 @@ public class Accessor {
         n += stat.executeUpdate("DELETE FROM client WHERE fio = '" + fio + "'");
         return n;
     }
-}
 
-/*********************************** Task 3  ******************************************/
+    /*********************************** Task 3  ******************************************/
+    public int addClient(Client client) throws Exception {
+        int id = 0;
+        //checking if client already exists
+        ResultSet rs = stat.executeQuery("SELECT fio FROM Client WHERE fio='" + client.getFio() + "'");
+        if (rs.next())
+            throw new Exception("such client is exist");
+        //get the last ID
+        rs = stat.executeQuery("SELECT max(id_client) FROM Client");
+        if (rs.next())
+            id = rs.getInt(1);
+        client.setId_client(id);
+        //insert new Client. executeUpdate returns count of affected rows
+        int n = stat.executeUpdate("INSERT INTO Client (fio, passport) VALUES ( '" + client.getFio() + "','" + client.getPassport() + "')");
+        return n;
+    }
+
+    List<Client> getAllClients() throws SQLException, Exception {
+        List<Client> res = new ArrayList<>();
+        ResultSet rs = stat.executeQuery("SELECT id_client, fio, passport FROM Client");
+        while (rs.next()) {
+            Client client = new Client(rs.getString("fio"), rs.getString("passport"));
+            client.setId_client(rs.getInt("id_client"));
+            res.add(client);
+        }
+        return res;
+    }
+}
 

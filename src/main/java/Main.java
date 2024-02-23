@@ -1,6 +1,8 @@
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
 
 public class Main {
@@ -18,7 +20,6 @@ public class Main {
                 System.exit(0);
             }
 
-
             ArrayList<String> v = ac.getComfort();
             System.out.println("List of comfort:");
             for (int i = 0; i < v.size(); i++)
@@ -31,7 +32,7 @@ public class Main {
                 System.out.println("not successful");
 
             System.out.println("Task 1:");
-            Map<Integer, Double> task1 = ac.task1(2);
+            Map<Integer, Float> task1 = ac.task1(2);
             for (var e : task1.entrySet()) {
                 System.out.println("\t" + e.getKey() + " " + e.getValue());
             }
@@ -82,6 +83,26 @@ public class Main {
                 System.out.println("\t Changed rows: " + n);
             } catch (Exception e) {
                 e.printStackTrace();
+            }
+            System.out.println("PRAC 3\nTASK 1");
+            Client client = new Client("Mudrik M.D", "XA 412341");
+            System.out.println("Task 2");
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("Enter fio");
+            String fio = scanner.nextLine();
+            System.out.println("Enter passport like XX 123456");
+            String passport = scanner.nextLine();
+            client = new Client(fio, passport);
+            try {
+                int n = ac.addClient(client);
+                System.out.println("\t Changed rows: " + n);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            System.out.println("Task 3");
+            List<Client> clients = ac.getAllClients();
+            for (Client client1 : clients) {
+                System.out.println(client1);
             }
             //close connection to DB
             ac.closeConnection();
