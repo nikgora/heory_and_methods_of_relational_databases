@@ -92,8 +92,8 @@ public class Main {
             String fio = scanner.nextLine();
             System.out.println("Enter passport like XX 123456");
             String passport = scanner.nextLine();
-            client = new Client(fio, passport);
             try {
+                client = new Client(fio, passport);
                 int n = ac.addClient(client);
                 System.out.println("\t Changed rows: " + n);
             } catch (Exception e) {
