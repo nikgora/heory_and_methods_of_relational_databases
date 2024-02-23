@@ -54,7 +54,7 @@ public class Accessor {
 
 //return list of Comforts
     public ArrayList<String> getComfort() throws SQLException {
-        ArrayList<String> arr = new ArrayList<String>();
+        ArrayList<String> arr = new ArrayList<>();
         ResultSet rs = stat.executeQuery("SELECT description FROM Comfort");
         while (rs.next()) {
             arr.add(rs.getString("description"));
@@ -78,16 +78,14 @@ public class Accessor {
             id = rs.getInt(1);
         //insert new Client. executeUpdate returns count of affected rows
         int n = stat.executeUpdate("INSERT INTO Client (fio, passport) VALUES ( '" + fio + "','" + pasport + "')");
-        if (n > 0)
-            return true;
-        return false;
+        return n > 0;
     }
 
     /**
      * PRAC 1
      */
     public Map<Integer, Float> task1(int capacity) throws SQLException {
-        Map<Integer, Float> map = new HashMap<Integer, Float>();
+        Map<Integer, Float> map = new HashMap<>();
         ResultSet rs = stat.executeQuery("SELECT number_room, price FROM Room WHERE capacity='" + capacity + "'");
         while (rs.next()) {
             map.put(rs.getInt("number_room"), rs.getFloat("price"));
@@ -97,7 +95,7 @@ public class Accessor {
     }
 
     public ArrayList<Integer> task2(String description, Date date) throws SQLException {
-        ArrayList<Integer> arr = new ArrayList<Integer>();
+        ArrayList<Integer> arr = new ArrayList<>();
         ResultSet rs = stat.executeQuery("SELECT number_room FROM Room WHERE ref_comfort = (SELECT id_comfort FROM Comfort WHERE description = '" + description + "') AND( number_room  IN (SELECT ref_room FROM Renting WHERE date_out < '" + date + "' ) OR  number_room NOT IN (SELECT ref_room FROM Renting))");
         while (rs.next()) {
             arr.add(rs.getInt("number_room"));
@@ -116,7 +114,7 @@ public class Accessor {
     }
 
     public Map<String, Integer> task4() throws SQLException {
-        Map<String, Integer> map = new HashMap<String, Integer>();
+        Map<String, Integer> map = new HashMap<>();
         ResultSet rs = stat.executeQuery("SELECT description, COUNT(*) AS count FROM Room JOIN Comfort ON Room.ref_comfort = Comfort.id_comfort GROUP BY description");
         while (rs.next()) {
             map.put(rs.getString("description"), rs.getInt("count"));
@@ -126,7 +124,7 @@ public class Accessor {
     }
 
     public ArrayList<Integer> task5() throws SQLException {
-        ArrayList<Integer> arr = new ArrayList<Integer>();
+        ArrayList<Integer> arr = new ArrayList<>();
         ResultSet rs = stat.executeQuery("SELECT ref_room FROM Renting WHERE date_out = CURRENT_DATE");
         while (rs.next()) {
             arr.add(rs.getInt("ref_room"));
@@ -244,6 +242,17 @@ public class Accessor {
             client.setId_client(rs.getInt("id_client"));
             res.add(client);
         }
+        return res;
+    }
+
+    Map<String, String> getMetaData(String tableName) throws SQLException {
+        ResultSet rs = stat.executeQuery("SELECT * FROM " + tableName);
+        ResultSetMetaData resultSetMetaData = rs.getMetaData();
+        Map<String, String> res = new HashMap<>();
+        for (int i = 0; i < resultSetMetaData.getColumnCount(); i++) {
+            res.put(resultSetMetaData.getColumnName(i + 1), resultSetMetaData.getColumnTypeName(i + 1));
+        }
+        res.put("number of colums", String.valueOf(resultSetMetaData.getColumnCount()));
         return res;
     }
 }

@@ -102,7 +102,16 @@ public class Main {
             System.out.println("Task 3");
             List<Client> clients = ac.getAllClients();
             for (Client client1 : clients) {
-                System.out.println(client1);
+                System.out.println("\t" + client1);
+            }
+            System.out.println("Task 4");
+            try {
+                Map<String, String> result = ac.getMetaData("client");
+                for (var e : result.entrySet()) {
+                    System.out.println("\t" + e.getKey() + " " + e.getValue());
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
             //close connection to DB
             ac.closeConnection();
