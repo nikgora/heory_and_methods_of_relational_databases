@@ -85,7 +85,20 @@ public class Main {
                 e.printStackTrace();
             }
             System.out.println("PRAC 3\nTASK 1");
-            Client client = new Client("Mudrik M.D", "XA 412341");
+            Client client;
+            try {
+                client = new Client("Mudrik M.D", "XA 412341");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                Room room = new Room(123, 2, "стандарт", 32);
+                System.out.println(room);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
             System.out.println("Task 2");
             Scanner scanner = new Scanner(System.in);
             System.out.println("Enter fio");

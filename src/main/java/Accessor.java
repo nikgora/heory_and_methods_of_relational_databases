@@ -50,9 +50,20 @@ public class Accessor {
     }
 
     /*********************************** Exsamples ******************************************/
+    public int getIdComfort(String comfort) throws SQLException, Exception {
+        int res = 0;
+        ResultSet rs = stat.executeQuery("SELECT id_comfort FROM Comfort WHERE description = '" + comfort + "'");
+        if (rs.next()) {
+            res = (rs.getInt("id_comfort"));
+        } else {
+            throw new Exception("No such comfort");
+        }
+        rs.close();
+        return res;
+    }
 
 
-//return list of Comforts
+    //return list of Comforts
     public ArrayList<String> getComfort() throws SQLException {
         ArrayList<String> arr = new ArrayList<>();
         ResultSet rs = stat.executeQuery("SELECT description FROM Comfort");
@@ -221,14 +232,13 @@ public class Accessor {
     public int addClient(Client client) throws Exception {
         int id = 0;
         //checking if client already exists
-        ResultSet rs = stat.executeQuery("SELECT fio FROM Client WHERE fio='" + client.getFio() + "'");
+        ResultSet rs = stat.executeQuery("SELECT fio FROM Client WHERE fio='" + client.getFio() + "' AND passport = '" + client.getPassport() + "'");
         if (rs.next())
             throw new Exception("such client is exist");
         //get the last ID
         rs = stat.executeQuery("SELECT max(id_client) FROM Client");
         if (rs.next())
             id = rs.getInt(1);
-        client.setId_client(id);
         //insert new Client. executeUpdate returns count of affected rows
         int n = stat.executeUpdate("INSERT INTO Client (fio, passport) VALUES ( '" + client.getFio() + "','" + client.getPassport() + "')");
         return n;
@@ -239,7 +249,6 @@ public class Accessor {
         ResultSet rs = stat.executeQuery("SELECT id_client, fio, passport FROM Client");
         while (rs.next()) {
             Client client = new Client(rs.getString("fio"), rs.getString("passport"));
-            client.setId_client(rs.getInt("id_client"));
             res.add(client);
         }
         return res;
