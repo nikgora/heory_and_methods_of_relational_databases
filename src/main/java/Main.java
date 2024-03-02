@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-
 public class Main {
 
     /**
@@ -19,7 +18,6 @@ public class Main {
                 System.out.println("Connection faild");
                 System.exit(0);
             }
-
             ArrayList<String> v = ac.getComfort();
             System.out.println("List of comfort:");
             for (int i = 0; i < v.size(); i++)
@@ -129,6 +127,13 @@ public class Main {
             System.out.println("Prac4");
             try {
                 float res = ac.registerClient(111, "asd", "XX 123456", new Date(124, 2, 1), 4);
+                System.out.println(res);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+            System.out.println("Prac5");
+            try {
+                boolean res = ac.addRooms(2, 123);
                 System.out.println(res);
             } catch (Exception ex) {
                 ex.printStackTrace();

@@ -337,5 +337,49 @@ $$
 
         return totalCost;
     }
+
+
+    //PRAC 5
+    public boolean addRooms(int capacity, float price) throws Exception {
+        PreparedStatement pst = null;
+        try {
+            con.setAutoCommit(false);
+            int max_id_comfort = 0;
+            ResultSet rs = stat.executeQuery("SELECT count(id_comfort) FROM comfort");
+            if (rs.next()) {
+                max_id_comfort = rs.getInt(1);
+            }
+            pst = con.prepareStatement("insert into room values (?, ?, ?, ?)");
+            for (int i = 0; i < max_id_comfort; i++) {
+                rs = stat.executeQuery("SELECT max(number_room) FROM room");
+                int idRoom = 0;
+                if (rs.next()) {
+                    idRoom = rs.getInt(1);
+                }
+                pst.setInt(1, idRoom + 1 + i);
+                pst.setInt(2, capacity);
+                pst.setInt(3, i + 1);
+                pst.setFloat(4, price);
+                pst.addBatch();
+            }
+            int[] result = pst.executeBatch();
+            for (int aResult : result) {
+                if (aResult != 1) {
+                    con.rollback();
+                    pst.clearBatch();
+                    break;
+                }
+            }
+        } catch (SQLException e) {
+            con.rollback();
+            throw e;
+        } finally {
+            if (pst != null) {
+                pst.close();
+            }
+            con.setAutoCommit(true);
+        }
+        return true;
+    }
 }
 
