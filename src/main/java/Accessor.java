@@ -264,5 +264,78 @@ public class Accessor {
         res.put("number of colums", String.valueOf(resultSetMetaData.getColumnCount()));
         return res;
     }
+
+    //TODO Спитати Чому у 326 треба писати Types.REAL а не Types.FLOAT
+    /// Task 4
+    /*
+
+CREATE OR REPLACE FUNCTION register_client(
+    p_room_number INT,
+    p_fio VARCHAR(100),
+    p_passport VARCHAR(20),
+    p_date_in DATE,
+    p_num_days INT
+) RETURNS FLOAT AS
+$$
+DECLARE
+    v_price FLOAT;
+    v_client_id INT;
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM room WHERE number_room = p_room_number) THEN
+        RAISE EXCEPTION 'Room with number % does not exist', p_room_number;
+    END IF;
+
+    IF EXISTS (SELECT ref_room FROM renting WHERE ref_room = p_room_number AND (current_date >= date_in and ((current_date < date_out)or date_out is NULL))) THEN
+        RAISE EXCEPTION 'Room with number % is already occupied', p_room_number;
+    END IF;
+
+
+    SELECT id_client INTO v_client_id FROM client WHERE fio = p_fio AND passport = p_passport;
+
+
+    IF v_client_id IS NULL THEN
+        INSERT INTO client (fio, passport) VALUES (p_fio, p_passport) RETURNING id_client INTO v_client_id;
+    END IF;
+
+
+    SELECT price * p_num_days INTO v_price
+    FROM room
+    WHERE number_room = p_room_number;
+
+
+    INSERT INTO renting (ref_client, ref_room, date_in, date_out)
+    VALUES (v_client_id, p_room_number, p_date_in, p_date_in + p_num_days);
+
+    RETURN v_price;
+END;
+$$
+    LANGUAGE plpgsql;
+
+     */
+    public float registerClient(int roomNumber, String clientName, String passportData, Date checkInDate, int stayDuration) throws SQLException {
+        float totalCost = 0;
+        CallableStatement cstmt = null;
+
+        try {
+            cstmt = con.prepareCall("{call register_client(?, ?, ?, ?, ?, ?)}");
+            cstmt.setInt(1, roomNumber);
+            cstmt.setString(2, clientName);
+            cstmt.setString(3, passportData);
+            cstmt.setDate(4, checkInDate);
+            cstmt.setInt(5, stayDuration);
+            cstmt.registerOutParameter(6, Types.REAL);
+
+            cstmt.execute();
+
+            totalCost = cstmt.getFloat(6);
+
+        } finally {
+            if (cstmt != null) {
+                cstmt.close();
+            }
+        }
+
+        return totalCost;
+    }
 }
 

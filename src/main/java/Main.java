@@ -126,6 +126,13 @@ public class Main {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            System.out.println("Prac4");
+            try {
+                float res = ac.registerClient(111, "asd", "XX 123456", new Date(124, 2, 1), 4);
+                System.out.println(res);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
             //close connection to DB
             ac.closeConnection();
         } catch (Exception ex) {
