@@ -265,7 +265,6 @@ public class Accessor {
         return res;
     }
 
-    //TODO Спитати Чому у 326 треба писати Types.REAL а не Types.FLOAT
     /// Task 4
     /*
 
