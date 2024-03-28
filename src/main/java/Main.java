@@ -126,7 +126,7 @@ public class Main {
             }
             System.out.println("Prac4");
             try {
-                float res = ac.registerClient(111, "asd", "XX 123456", new Date(124, 2, 1), 4);
+                float res = ac.registerClient(111, "asd", "XX 123456", new Date(124, 2, 6), 2);
                 System.out.println(res);
             } catch (Exception ex) {
                 ex.printStackTrace();
